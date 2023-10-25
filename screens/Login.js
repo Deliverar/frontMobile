@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
-import Footer from '../../componentes/Footer'; // Asegúrate de que la ruta sea correcta
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
+import Footer from '../componentes/Footer'; // Asegúrate de que la ruta sea correcta
 import { useNavigation } from '@react-navigation/native';
-import Button from '../../componentes/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Button from '../componentes/Button';
 import { StatusBar } from 'expo-status-bar';
-// import style from '../../styles/style.css';
+import * as Font from 'expo-font';
+import { IA_URL } from '../envs';
 
 
-const buttonTheme = {
-    buttonBackground: 'rgba(255, 153, 0, 0.85)',
-    buttonText: '#fff',
-    buttonStroke: '#DCDBDB',
-    buttonStrokeWidth: 1,
-};
-//   const apiUrl = API_URL;
 
 export default function Login() {
+    const IAUrl = IA_URL;
     const [alias, setAlias] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
@@ -24,7 +20,6 @@ export default function Login() {
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
     useEffect(() => {
-        // Verificar si el mensaje ya se mostró anteriormente
         const getCredentials = async () => {
             const storedAlias = await AsyncStorage.getItem('alias');
             if (storedAlias) {
@@ -36,31 +31,32 @@ export default function Login() {
 
     const handleAliasChange = (text) => {
         setAlias(text);
-        setShowErrorMessage(false); // Resetear el mensaje de error al cambiar el alias
+        setShowErrorMessage(false);
     };
 
     const handlePasswordChange = (text) => {
         setPassword(text);
-        setShowErrorMessage(false); // Resetear el mensaje de error al cambiar la contraseña
+        setShowErrorMessage(false);
     };
 
     const handleForgotPassword = () => {
         navigation.navigate('GeneratePassword');
-        // Implementa tu lógica para recuperar la contraseña
     };
 
+    const handleUnlockAccount = () => {
+        navigation.navigate('ValidateAccount');
+    };
+    
+
     useEffect(() => {
-        // Obtener las credenciales guardadas
         const getStoredCredentials = async () => {
             if (Platform.OS === 'ios') {
-                // Para iOS, utiliza el Keychain
                 const storedCredentials = await Keychain.getGenericPassword();
                 if (storedCredentials) {
                     setAlias(storedCredentials.username);
                     setPassword(storedCredentials.password);
                 }
             } else if (Platform.OS === 'android') {
-                // Para Android, utiliza el AsyncStorage
                 const storedAlias = await AsyncStorage.getItem('alias');
                 const storedPassword = await AsyncStorage.getItem('password');
                 if (storedAlias && storedPassword) {
@@ -83,12 +79,12 @@ export default function Login() {
 
         try {
             // const response = await fetch(`http://192.168.0.140:8080/usuario/login?alias=${alias}&contrasenia=${password}`, requestOptions);
-            const response = await fetch(`${apiUrl}/usuario/login?alias=${alias}&contrasenia=${password}`, requestOptions);
+            const response = await fetch(`${IAUrl}/api/LoginUid?uid=${alias}&pass=${password}`, requestOptions);
             const result = await response.text();
             console.log("soy Result: " + result);
-            await AsyncStorage.setItem('@idUsuario', JSON.stringify(JSON.parse(result).idUsuario))
-            // console.log("asd")
-            // Resto de tu lógica basada en la respuesta de la API
+            console.log("soy response.status: " + response.status);
+            // await AsyncStorage.setItem('@idUsuario', JSON.stringify(JSON.parse(result).idUsuario))
+
             if (response.status === 200) {
 
                 // El inicio de sesión fue exitoso
@@ -99,7 +95,6 @@ export default function Login() {
                         await Keychain.setGenericPassword(alias, password);
                     } else if (Platform.OS === 'android') {
                         // Para Android, guarda las credenciales en el AsyncStorage
-                        //await AsyncStorage.setItem('idUsuario', JSON.parse(result).idUsuario);
                         await AsyncStorage.setItem('alias', alias);
                         await AsyncStorage.setItem('password', password);
                     }
@@ -110,7 +105,8 @@ export default function Login() {
                 if (!saveCredentials && showSaveCredentialsMessage) {
                     setShowSaveCredentialsMessage(true);
                 } else {
-                    console.log(alias);
+                    // console.log("asddd" + alias);
+                    await AsyncStorage.setItem('@alias', alias);
                     navigation.navigate('Feed', { alias: alias });
                 }
             } else {
@@ -123,15 +119,13 @@ export default function Login() {
         }
     };
 
-
-
     return (
         <View style={styles.content}>
             <StatusBar style="auto" />
             <View style={styles.frame}>
                 <View style={styles.contenidoDePagina}>
                     <View style={styles.rectangle}>
-                        <Text style={styles.login}>Iniciar sesion</Text>
+                        <Text style={styles.login}>Iniciar sesión</Text>
                         <View style={styles.overlapGroup}>
                             <TextInput
                                 style={styles.email}
@@ -148,16 +142,28 @@ export default function Login() {
                                 placeholder="Contraseña"
                                 required
                                 placeholderTextColor="#888"
-                                value={alias}
-                                onChangeText={handleAliasChange}
+                                value={password}
+                                onChangeText={handlePasswordChange}
+                                secureTextEntry={true}
                             />
                         </View>
-                        <Text style={styles.textWrapper2}>Olvide mi contraseña</Text>
+                        <TouchableOpacity onPress={handleForgotPassword} >
+                            <Text style={styles.textWrapper2}>Olvide mi contraseña</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleUnlockAccount} >
+                            <Text style={styles.textWrapper2}>Desbloquear mi cuenta</Text>
+                        </TouchableOpacity>
+
+                        <Button
+                            theme="loginButton"
+                            label="Iniciar sesión"
+                            onPress={handleLogin}
+                        />
                     </View>
                 </View>
-                <Footer style={styles.footer} />
             </View>
-        </View>
+            <Footer style={styles.footer} />
+        </View >
     );
 }
 
@@ -166,6 +172,7 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         justifyContent: 'center',
+        fontFamily: 'Roboto-Regular',
         alignItems: 'center',
     },
     frame: {
@@ -173,7 +180,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#f0f8ffeb',
         padding: '35px 28px',
-        position: 'relative',
+        position: 'absolute',
         width: 322,
     },
     contenidoDePagina: {
@@ -183,21 +190,15 @@ const styles = StyleSheet.create({
     rectangle: {
         backgroundColor: 'rgba(240, 248, 255, 0.92)', // Color y opacidad
         width: 322,
-        height: 262,
+        height: 322,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    usuario: {
-        height: 34,
-        left: 0,
-        position: 'absolute',
-        top: 47,
-        width: 271,
-    },
     overlapGroup: {
-        backgroundColor: '#fff',
+        backgroundColor: '#ffffff',
         backgroundSize: '100% 100%',
+        color: 'white',
         height: 42,
         left: -4,
         marginBottom: 15,
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
         boxShadow: '0px 10px 12px #00000040',
     },
     overlapGroup2: {
-        backgroundColor: '#fff',
+        backgroundColor: '#ffffff',
         backgroundSize: '100% 100%',
         height: 42,
         left: -4,
@@ -221,41 +222,32 @@ const styles = StyleSheet.create({
         boxShadow: '0px 10px 12px #00000040',
     },
     email: {
-        color: '#00000033',
-        fontFamily: 'Rubik-Regular',
+        color: '#000',
+        backgroundColor: '#fff',
+        fontFamily: 'Roboto-Regular',
         fontSize: 16,
         fontWeight: '400',
-        left: 9,
         letterSpacing: 0,
-        lineHeight: 'normal',
-        borderRadius: '15px',
-        top: 8,
-        whiteSpace: 'nowrap',
-        alignItems: 'center',
-    },
-    signInButton: {
-        alignItems: 'flex-start',
-        backgroundColor: '#007bffd9',
-        border: '1px solid',
-        borderColor: '#dbdbdb',
-        borderRadius: 7,
-        boxShadow: '0px 4px 4px #007bff40',
-        display: 'inline-flex',
-        gap: 10,
-        left: 68,
-        overflow: 'hidden',
-        padding: '3px 23px',
+        left: 9,
         position: 'absolute',
-        top: 165,
+    },
+    password: {
+        color: '#000000',
+        fontFamily: 'Roboto-Regular',
+        fontSize: 16,
+        fontWeight: '400',
+        letterSpacing: 0,
+        left: 9,
+        position: 'absolute',
+        // width: '100%',
     },
     textWrapper: {
-        color: '#ffffff',
+        color: '#fff',
         fontFamily: 'Roboto-Regular',
         fontSize: 18,
         fontWeight: '400',
         letterSpacing: 0,
         lineHeight: 'normal',
-        // marginTop: -1,
         position: 'relative',
         whiteSpace: 'nowrap',
         width: 'fit-content',
@@ -268,19 +260,9 @@ const styles = StyleSheet.create({
         position: 'relative',
         width: 277,
     },
-    password: {
-        color: '#00000033',
-        fontFamily: 'Rubik-Regular',
-        fontSize: 16,
-        fontWeight: '400',
-        letterSpacing: 0,
-        lineHeight: 'normal',
-        position: 'absolute',
-        width: 192,
-    },
     login: {
         color: '#000000',
-        fontFamily: 'Roboto',
+        fontFamily: 'Roboto-Regular',
         fontSize: 24,
         fontWeight: 'bold',
         position: 'absolute',
@@ -291,9 +273,14 @@ const styles = StyleSheet.create({
     textWrapper2: {
         color: '#000aff',
         textDecorationLine: 'underline',
-        fontFamily: 'Rubik-Regular',
+        fontFamily: 'Roboto-Regular',
         position: 'initial',
         marginTop: 10,
+        marginBottom: 10,
+    },
+    footer: {
+        display: 'flex',
+        justifyContent: 'flex-end',
     },
 });
 

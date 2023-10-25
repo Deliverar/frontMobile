@@ -1,7 +1,5 @@
 import { StyleSheet, View, Pressable, Text } from 'react-native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import * as Font from 'expo-font';
-// import RobotoRegular from './assets/Roboto/Roboto-Regular.ttf';
 
 export default function Button({ label, theme, onPress }) {
   if (theme === "primary") {
@@ -82,32 +80,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 3,
-    fontFamily: 'Roboto',
   },
   signInButton: {
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#007bffd9',
-    border: '0.5px solid',
+    border: ' 0.5px solid',
     borderColor: '#dbdbdb',
     borderRadius: '7px',
     display: 'inline-flex',
-    width: 110,
+    width: 100,
     overflow: 'hidden',
     padding: '3px 23px',
     position: 'relative',
-    height: 30,
-    fontFamily: 'Roboto-Regular',
   },
   
   textWrapper: {
     color: '#ffffff',
+    fontFamily: 'Roboto-Regular',
     fontSize: '16px',
     textAlign: 'center',
     marginTop: '-1px',
     position: 'relative',
-    fontFamily: 'Roboto-Regular',
-    fontWeight: 'bold',
   }
   
 });

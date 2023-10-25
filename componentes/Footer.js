@@ -4,7 +4,8 @@ import { View, StyleSheet, Image, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 // import Logo from '../assets/Logo.svg'
 
-const Logo = require('../assets/Logo.svg');
+// const Logo = require('../assets/Logo.svg');
+const Logo = require('../assets/Logo.png');
 
 const Footer = () => {
 
@@ -32,12 +33,15 @@ const Footer = () => {
 const styles = StyleSheet.create({
   footer: {
     display: 'flex',
-    position: 'fixed',
-    justifyContent: 'flex-end',
-    bottom: 0,
+    // position: 'fixed',
+    justifyContent: 'center',
     width: '100%',
     height: 80,
-    alignItems: 'center', // Centra el contenido verticalmente
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
   },  
   linearGradient: {
     width: '100%',
@@ -52,7 +56,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoText: {
-    fontSize: 10,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#fff',
   },

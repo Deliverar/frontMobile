@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingBottom: 16,
+    fontFamily: 'Roboto-Regular',
   },
   imageContainer: {
     flex: 1/3,
@@ -143,6 +144,7 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
+    letterSpacing: 0,
   },
   input: {
     width: '50%',
@@ -157,6 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: 'justify',
     marginBottom: 16,
+    letterSpacing: 0,
   },
   forgotPasswordButton: {
     marginVertical: 8,
@@ -164,10 +167,13 @@ const styles = StyleSheet.create({
   forgotPasswordText: {
     color: 'blue',
     textDecorationLine: 'underline',
+    fontFamily: 'Roboto-Regular',
+    letterSpacing: 0,
   },
   inputContainer: {
     width: '10%',
     paddingHorizontal: 24, // Ajusta el padding según tus necesidades
+    fontFamily: 'Roboto-Regular',
   },
   button: {
     backgroundColor: 'rgba(255, 153, 0, 0.85)',

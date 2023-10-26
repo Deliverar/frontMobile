@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   // },
   square: {
     backgroundColor: 'rgba(240, 248, 255, 0.92)', // Color y opacidad
-    width: 322,
+    width: 422,
     height: 200,
     display: 'flex',
     alignItems: 'center',
@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 16,
+    letterSpacing: 0,
   },
   forgotPasswordButton: {
     marginVertical: 8,
@@ -184,6 +185,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     marginBottom: 8,
     color: '#000',
+    letterSpacing: 0,
   },
   button: {
     fontWeight: 'bold',

@@ -72,12 +72,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: StatusBar.currentHeight || 0, // Agregar margen superior para evitar superposición con la barra de estado
+        fontFamily: 'Roboto-Regular',
     },
     content: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: '5%',
+        fontFamily: 'Roboto-Regular',
     },
     image: {
         width: 200,
@@ -91,7 +93,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
-        textAlign: 'justify'
+        textAlign: 'justify',
+        fontFamily: 'Roboto-Regular',
     },
     buttonContainer: {
         alignItems: 'center',

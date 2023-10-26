@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: 'justify',
     marginBottom: 16,
+    letterSpacing: 0,
   },
   forgotPasswordButton: {
     marginVertical: 8,

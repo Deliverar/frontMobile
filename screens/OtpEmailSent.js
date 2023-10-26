@@ -92,7 +92,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
-        textAlign: 'justify'
+        textAlign: 'justify',
+        letterSpacing: 0,
     },
     buttonContainer: {
         alignItems: 'center',

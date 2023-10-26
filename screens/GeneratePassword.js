@@ -145,11 +145,13 @@ const styles = StyleSheet.create({
   },
   square: {
     backgroundColor: 'rgba(240, 248, 255, 0.92)', // Color y opacidad
-    width: 322,
+    width: 422,
     height: 200,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 5,
+    alignContent: 'center',
 },
   title: {
     fontSize: 20,
